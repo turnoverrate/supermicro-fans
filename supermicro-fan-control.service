@@ -1,0 +1,51 @@
+[Unit]
+Description=Supermicro IPMI Fan Control Service
+Documentation=man:ipmitool(1)
+After=network.target
+
+# Ensure the service doesn't start until the system is fully booted
+After=multi-user.target
+
+# This service manages hardware fans
+Wants=sysinit.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/supermicro-fan-control.sh
+
+# Restart policy: always restart on failure, but with rate limiting
+Restart=on-failure
+RestartSec=30
+StartLimitInterval=300
+StartLimitBurst=5
+
+# Run as root (required for IPMI access)
+User=root
+Group=root
+
+# Security hardening
+# Note: We need full system access for IPMI, so hardening is limited
+PrivateTmp=yes
+NoNewPrivileges=yes
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=fan-control
+
+# Resource limits
+Nice=-10
+IOSchedulingClass=realtime
+IOSchedulingPriority=0
+
+# Ensure fans return to 100% speed on service stop/failure for safety
+# Set both Zone 0 (CPU) and Zone 1 (Peripheral) to 100%
+ExecStopPost=/bin/bash -c 'ipmitool raw 0x30 0x70 0x66 0x01 0x00 0xFF; ipmitool raw 0x30 0x70 0x66 0x01 0x01 0xFF || true'
+
+# Process management
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
