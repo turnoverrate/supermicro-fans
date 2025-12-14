@@ -55,7 +55,7 @@ declare -A FAN_CURVE=(
 )
 
 # IPMI commands
-IPMI_ENABLE_MANUAL="0x30 0x45 0x01 0x01"
+IPMI_ENABLE_MANUAL="0x30 0x45 0x01 0x02"
 IPMI_SET_FAN_ZONE="0x30 0x70 0x66 0x01"
 
 # Alternative method to return to auto mode (using standard IPMI command)
