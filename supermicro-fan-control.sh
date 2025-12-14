@@ -93,9 +93,9 @@ log() {
 # Convert percentage to hex value
 percent_to_hex() {
     local percent=$1
-    local decimal
-    decimal=$(( (percent * 255) / 100 ))
-    printf "0x%02x" "${decimal}"
+    (( percent < 0 )) && percent=0
+    (( percent > 100 )) && percent=100
+    printf "0x%02x" "$percent"
 }
 
 # Get temperature from IPMI sensor
