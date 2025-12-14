@@ -61,7 +61,7 @@ IPMI_SET_FAN_ZONE="0x30 0x70 0x66 0x01"
 # Alternative method to return to auto mode (using standard IPMI command)
 # Note: The raw 0x30 0x45 0x01 0x00 command failed on your system,
 # so we'll use the fan mode command instead
-IPMI_ENABLE_AUTO_ALT="raw 0x30 0x01 0x01"
+IPMI_ENABLE_AUTO_ALT="raw 0x30 0x45 0x01 0x02"
 
 # State tracking
 CURRENT_CPU_DUTY=0
